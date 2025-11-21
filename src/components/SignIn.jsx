@@ -2,9 +2,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import google from "../assets/googleIcon.png";
 import github from "../assets/github.png";
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 
-import { auth } from "../Firebase/firebase.init";
 
 import toast from "react-hot-toast";
 import { AuthContext } from "../Providers/AuthProvider";
@@ -21,7 +20,7 @@ const SignIn = () => {
 
 
   const [visiblePassword, setVisiblePassword] = useState(false);
-  const emailRef = useRef();
+ 
   const notify = () => toast("Successfully logged in!");
   const handleSignIn = (e) => {
     e.preventDefault();
