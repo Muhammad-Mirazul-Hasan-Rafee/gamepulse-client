@@ -41,6 +41,7 @@ const AddReview = () => {
         console.log(data);
 
         if (data.insertedId) {
+        
           Swal.fire({
             title: "Hurrah!",
             text: "Review inserted successfully!",

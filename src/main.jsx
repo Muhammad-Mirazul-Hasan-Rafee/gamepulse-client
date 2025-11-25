@@ -17,7 +17,6 @@ import PrivateRoute from "./Routes/PrivateRoute.jsx";
 import MyReviews from "./components/MyReviews.jsx";
 import GameWatchList from "./components/GameWatchList.jsx";
 import Profile from "./components/Profile.jsx";
-import UpdatedGames from "./components/UpdatedGames.jsx";
 
 
 
@@ -50,12 +49,12 @@ const router = createBrowserRouter([
         path: "myreviews",
         element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>,
         loader:()=> fetch('http://localhost:8000/game')
-      },
-       {
-        path: "updatedgames/:id",
-        element: <PrivateRoute><UpdatedGames></UpdatedGames></PrivateRoute>,
-        loader:({params})=> fetch(`http://localhost:8000/game/${params.id}`)
-      },
+       },
+      //  {
+      //   path: "updatedgames/:id",
+      //   element: <PrivateRoute><UpdatedGames></UpdatedGames></PrivateRoute>,
+      //   loader:({params})=> fetch(`http://localhost:8000/game/${params.id}`)
+      // },
 
       {
         path: "gamewatchlist",

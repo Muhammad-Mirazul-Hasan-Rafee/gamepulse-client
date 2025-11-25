@@ -1,20 +1,57 @@
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FcDeleteRow } from "react-icons/fc";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+
 const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
   const { _id, thumbnail, gameTitle, rating, reviewDescription } = reviewedGame;
 
-  // Delete
+  const [showModal, setShowModal] = useState(false);
+
+  // --------------------- Update handler ---------------------
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const updatedTitle = form.gametitle.value;
+    const updatedDescription = form.reviewdescription.value;
+    const updatedThumb = form.thumbnail.value;
+
+    const updateGame = {
+      gameTitle: updatedTitle,
+      reviewDescription: updatedDescription,
+      thumbnail: updatedThumb,
+    };
+
+    // .....................  Sending to server  ..................................
+    fetch(`http://localhost:8000/game/${_id}`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(updateGame),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          Swal.fire({
+            title: "Hurrah!",
+            text: "Review updated successfully!",
+            imageUrl: updatedThumb,
+            imageWidth: 400,
+            imageHeight: 200,
+          });
+
+          setShowModal(false); // FIXED: modal now closes
+        }
+      });
+  };
+
+  // --------------------- Delete handler ---------------------
   const handleDelete = (_id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         fetch(`http://localhost:8000/game/${_id}`, {
@@ -22,15 +59,11 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.deletedCount > 0) {
-              const remainingReview = gameRemove.filter((gr) => gr._id !== _id);
-              setGameRemove(remainingReview);
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your review has been deleted.",
-                icon: "success",
-              });
+              const remaining = gameRemove.filter((g) => g._id !== _id);
+              setGameRemove(remaining);
+
+              Swal.fire("Deleted!", "Your review has been deleted.", "success");
             }
           });
       }
@@ -38,39 +71,110 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
   };
 
   return (
-    <div className="max-w-full w-full md:w-[600px] bg-base-100 shadow-md rounded-xl p-4 mx-auto">
-      {/* Thumbnail + Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <img
-          src={thumbnail}
-          alt={gameTitle}
-          className="w-full sm:w-1/3 h-40 object-cover rounded-lg "
-        />
+    <>
+      {/* ------- Game Card----- */}
+      <div className="sm:w-full h-auto md:w-[480px] md:h-[450px] bg-base-100 shadow-md rounded-xl p-4 mx-auto">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between">
+          <img
+            src={thumbnail}
+            alt={gameTitle}
+            className="w-24 sm:w-1/3 h-32 object-cover rounded-lg"
+          />
 
-        <div className="flex justify-end gap-4 ml-4 sm:w-1/3">
-          <Link to={`/updatedgames/${_id}`} className="h-12 text-xl p-2 bg-gray-800 text-yellow-300 rounded-lg hover:scale-110 transition">
-            <FaEdit />
-          </Link>
-          {/* id must pass korte hbe */}
-          <button
-            onClick={() => handleDelete(_id)}
-            className="h-12 text-xl p-2 bg-red-700 text-white rounded-lg hover:scale-110 transition"
-          >
-            <FcDeleteRow />
-          </button>
+          <div className="flex justify-end gap-4 sm:w-1/3">
+            {/*  modal toggle */}
+            <button
+              onClick={() => setShowModal(true)}
+              className="h-6 text-xl p-2 bg-gray-800 text-yellow-300 rounded-lg hover:scale-110 transition"
+            >
+              <FaEdit />
+            </button>
+
+            <button
+              onClick={() => handleDelete(_id)}
+              className="h-6 text-xl p-2 bg-red-700 text-white rounded-lg hover:scale-110 transition"
+            >
+              <FcDeleteRow />
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-4 space-y-2 text-sm sm:text-base">
+          <aside className="flex justify-between">
+            <h2 className="text-2xl font-bold text-yellow-400">{gameTitle}</h2>
+            <p className="font-bold text-lg">
+              Rating: <span className="text-amber-400">{rating}</span>
+            </p>
+          </aside>
+
+          <p className="text-gray-300 text-sm leading-relaxed">
+            {reviewDescription}
+          </p>
         </div>
       </div>
 
-      {/* Text Info */}
-      <div className="mt-4 space-y-2 text-sm sm:text-base">
-        <h2 className="text-2xl font-bold text-yellow-400">{gameTitle}</h2>
-        <p className="text-gray-300 leading-relaxed">{reviewDescription}</p>
+      {/* Modal for update */}
+      {showModal && (
+        <div
+          className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+        >
+          <div className="bg-gray-900 text-white p-6 rounded-lg w-[500px] shadow-xl">
 
-        <p className="font-bold text-lg">
-          Rating: <span className="text-amber-400">{rating}</span>
-        </p>
-      </div>
-    </div>
+            <h2 className="text-xl font-bold mb-4">
+              Update Review for: {gameTitle}
+            </h2>
+
+            <form onSubmit={handleUpdate}>
+              <label>Game Title:</label>
+              <input
+                type="text"
+                name="gametitle"
+                defaultValue={gameTitle}
+                className="w-full p-2 mb-3 bg-black border border-white"
+                required
+              />
+
+              <label>Description:</label>
+              <input
+                type="text"
+                name="reviewdescription"
+                defaultValue={reviewDescription}
+                className="w-full p-2 mb-3 bg-black border border-white"
+                required
+              />
+
+              <label>Thumbnail URL:</label>
+              <input
+                type="text"
+                name="thumbnail"
+                defaultValue={thumbnail}
+                className="w-full p-2 mb-4 bg-black border border-white"
+                required
+              />
+
+              <div className="flex justify-end gap-4">
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300 font-bold"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -8,7 +8,7 @@ const MyReviews = () => {
   return (
     <div>
       <h3 className="text-4xl text-white">My reviews:</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="flex justify-evenly px-5 sm:grid-cols-1 lg:grid-cols-2 lg:gap-x-4 lg:justify-evenly">
         {gameRemove.map((reviewedGame) => (
           <MyReviewGamesCard gameRemove={gameRemove} 
           setGameRemove={setGameRemove}

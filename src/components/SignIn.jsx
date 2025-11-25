@@ -2,7 +2,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import google from "../assets/googleIcon.png";
 import github from "../assets/github.png";
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { useContext, useState , emailRef } from "react";
 
 
 import toast from "react-hot-toast";
