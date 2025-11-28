@@ -1,26 +1,34 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FcDeleteRow } from "react-icons/fc";
 import Swal from "sweetalert2";
 
-const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
-  const { _id, thumbnail, gameTitle, rating, reviewDescription } = reviewedGame;
-
+const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
+  const {_id} = reviewedGame;
   const [showModal, setShowModal] = useState(false);
 
-  // --------------------- Update handler ---------------------
+   // get current state from games array
+  const game = games.find(g => g._id === _id);
+
+  const [title , setTitle] = useState(reviewedGame.gameTitle);
+  const [reViewDes , setDes] = useState(reviewedGame.reviewDescription);
+  const [thumb , setThumb] = useState(reviewedGame.thumbnail);
+
+  // ---------------------------------------------------------------------------------------
+  // .............................Update handler............................................
+  // ---------------------------------------------------------------------------------------
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const updatedTitle = form.gametitle.value;
-    const updatedDescription = form.reviewdescription.value;
-    const updatedThumb = form.thumbnail.value;
+    // const form = e.target;
+    // const updatedTitle = form.gametitle.value;
+    // const updatedDescription = form.reviewdescription.value;
+    // const updatedThumb = form.thumbnail.value;
 
     const updateGame = {
-      gameTitle: updatedTitle,
-      reviewDescription: updatedDescription,
-      thumbnail: updatedThumb,
+      gameTitle: title,
+      reviewDescription: reViewDes,
+      thumbnail: thumb,
     };
 
     // .....................  Sending to server  ..................................
@@ -35,12 +43,19 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
           Swal.fire({
             title: "Hurrah!",
             text: "Review updated successfully!",
-            imageUrl: updatedThumb,
+            imageUrl: reviewedGame.thumbnail,
             imageWidth: 400,
             imageHeight: 200,
           });
 
-          setShowModal(false); // FIXED: modal now closes
+          // updating card state without reload
+          const remainingUpdate = games.map((update) =>
+            update._id === _id ? { ...update, gameTitle: title , reviewDescription: reViewDes , thumbnail:thumb} : update
+          );
+          setGames(remainingUpdate);
+
+          // modal closes
+          setShowModal(false);
         }
       });
   };
@@ -60,8 +75,8 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount > 0) {
-              const remaining = gameRemove.filter((g) => g._id !== _id);
-              setGameRemove(remaining);
+              const remaining = games.filter((g) => g._id !== _id);
+              setGames(remaining);
 
               Swal.fire("Deleted!", "Your review has been deleted.", "success");
             }
@@ -76,8 +91,8 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
       <div className="sm:w-full h-auto md:w-[480px] md:h-[450px] bg-base-100 shadow-md rounded-xl p-4 mx-auto">
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <img
-            src={thumbnail}
-            alt={gameTitle}
+            src={reviewedGame.thumbnail}
+            alt={reviewedGame.gameTitle}
             className="w-24 sm:w-1/3 h-32 object-cover rounded-lg"
           />
 
@@ -101,27 +116,24 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
 
         <div className="mt-4 space-y-2 text-sm sm:text-base">
           <aside className="flex justify-between">
-            <h2 className="text-2xl font-bold text-yellow-400">{gameTitle}</h2>
+            <h2 className="text-2xl font-bold text-yellow-400">{reviewedGame.gameTitle}</h2>
             <p className="font-bold text-lg">
-              Rating: <span className="text-amber-400">{rating}</span>
+              Rating: <span className="text-amber-400">{reviewedGame.rating}</span>
             </p>
           </aside>
 
           <p className="text-gray-300 text-sm leading-relaxed">
-            {reviewDescription}
+            {reviewedGame.reviewDescription}
           </p>
         </div>
       </div>
 
       {/* Modal for update */}
       {showModal && (
-        <div
-          className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
-        >
+        <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
           <div className="bg-gray-900 text-white p-6 rounded-lg w-[500px] shadow-xl">
-
             <h2 className="text-xl font-bold mb-4">
-              Update Review for: {gameTitle}
+              Update Review for: {reviewedGame.gameTitle}
             </h2>
 
             <form onSubmit={handleUpdate}>
@@ -129,7 +141,8 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
               <input
                 type="text"
                 name="gametitle"
-                defaultValue={gameTitle}
+              value={title}
+              onChange={(e)=>setTitle(e.target.value)}
                 className="w-full p-2 mb-3 bg-black border border-white"
                 required
               />
@@ -138,7 +151,8 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
               <input
                 type="text"
                 name="reviewdescription"
-                defaultValue={reviewDescription}
+                value={reViewDes}
+                onChange={(e)=>setDes(e.target.value)}
                 className="w-full p-2 mb-3 bg-black border border-white"
                 required
               />
@@ -147,7 +161,9 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
               <input
                 type="text"
                 name="thumbnail"
-                defaultValue={thumbnail}
+                value={thumb}
+                onChange={(e)=>setThumb(e.target.value)}
+            
                 className="w-full p-2 mb-4 bg-black border border-white"
                 required
               />
@@ -170,7 +186,6 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -179,3 +194,5 @@ const MyReviewGamesCard = ({ reviewedGame, gameRemove, setGameRemove }) => {
 };
 
 export default MyReviewGamesCard;
+
+
