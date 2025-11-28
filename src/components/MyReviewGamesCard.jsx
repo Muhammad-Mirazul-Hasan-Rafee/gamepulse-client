@@ -7,8 +7,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
   const {_id} = reviewedGame;
   const [showModal, setShowModal] = useState(false);
 
-   // get current state from games array
-  const game = games.find(g => g._id === _id);
+
 
   const [title , setTitle] = useState(reviewedGame.gameTitle);
   const [reViewDes , setDes] = useState(reviewedGame.reviewDescription);
@@ -25,7 +24,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
     // const updatedDescription = form.reviewdescription.value;
     // const updatedThumb = form.thumbnail.value;
 
-    const updateGame = {
+    const updatedGame = {
       gameTitle: title,
       reviewDescription: reViewDes,
       thumbnail: thumb,
@@ -35,7 +34,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
     fetch(`http://localhost:8000/game/${_id}`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(updateGame),
+      body: JSON.stringify(updatedGame),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -49,9 +48,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
           });
 
           // updating card state without reload
-          const remainingUpdate = games.map((update) =>
-            update._id === _id ? { ...update, gameTitle: title , reviewDescription: reViewDes , thumbnail:thumb} : update
-          );
+          const remainingUpdate = games.map((game)=> game._id === _id ? {...game , ...updatedGame} : game);
           setGames(remainingUpdate);
 
           // modal closes
@@ -194,5 +191,4 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
 };
 
 export default MyReviewGamesCard;
-
 
