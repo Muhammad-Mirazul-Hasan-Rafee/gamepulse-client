@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const AddReview = () => {
+  const {user} = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -9,13 +11,15 @@ const AddReview = () => {
     const gameTitle = form.gametitle.value;
     const reviewDescription = form.reviewdescription.value;
     const name = form.name.value;
-    const email = form.email.value;
+    const email = user.email;
     const rating = form.rating.value;
     const publishingYear = form.publishingyear.value;
     const thumbnail = form.thumbnail.value;
     const genres = form.genres.value;
+    
 
     const newGame = {
+       uid: user.uid,
       gameTitle,
       reviewDescription,
       name,

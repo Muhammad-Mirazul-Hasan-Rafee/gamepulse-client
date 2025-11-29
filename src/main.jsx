@@ -1,3 +1,4 @@
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -48,7 +49,6 @@ const router = createBrowserRouter([
       {
         path: "myreviews",
         element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>,
-        loader:()=> fetch('http://localhost:8000/game')
        },
       //  {
       //   path: "updatedgames/:id",
