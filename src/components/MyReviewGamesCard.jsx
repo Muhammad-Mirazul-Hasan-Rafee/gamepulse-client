@@ -85,12 +85,12 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
   return (
     <>
       {/* ------- Game Card----- */}
-      <div className="sm:w-full h-auto md:w-[480px] md:h-[450px] bg-base-100 shadow-md rounded-xl p-4 mx-auto">
-        <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="p-4 w-full space-y-3 bg-base-100 shadow-md rounded-xl">
+        <div className="flex justify-between">
           <img
             src={reviewedGame.thumbnail}
             alt={reviewedGame.gameTitle}
-            className="w-24 sm:w-1/3 h-32 object-cover rounded-lg"
+            className="w-28 h-28 object-cover rounded-lg"
           />
 
           <div className="flex justify-end gap-4 sm:w-1/3">
@@ -114,8 +114,8 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
         <div className="mt-4 space-y-2 text-sm sm:text-base">
           <aside className="flex justify-between">
             <h2 className="text-2xl font-bold text-yellow-400">{reviewedGame.gameTitle}</h2>
-            <p className="font-bold text-lg">
-              Rating: <span className="text-amber-400">{reviewedGame.rating}</span>
+            <p className="font-bold text-sm flex justify-center items-center ml-3">
+              Rating: {reviewedGame.rating}
             </p>
           </aside>
 

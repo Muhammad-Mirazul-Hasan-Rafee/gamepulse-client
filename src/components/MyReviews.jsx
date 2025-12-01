@@ -11,6 +11,11 @@ const MyReviews = () => {
     if (!user?.uid) {
       return;
     }
+      if(!user){
+    return(
+      <p className="text-white text-center text-xl mt-10">You must be logged in !</p>
+    );
+  }
 
     fetch(`http://localhost:8000/game?uid=${user.uid}`)
       .then((res) => res.json()) 
@@ -28,6 +33,8 @@ const MyReviews = () => {
         setLoading(false);
       });
   }, [user]);
+
+
   if (loading){
     return <p className="text-white text-center mt-10">Loading...</p>;
   }
@@ -38,9 +45,9 @@ const MyReviews = () => {
     );
   }
   return (
-    <div>
+    <div className="px-2">
       <h3 className="text-4xl text-white">My reviews:</h3>
-      <div className="flex justify-evenly px-5 sm:grid-cols-1 lg:grid-cols-2 lg:gap-x-4 lg:justify-evenly">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-40 ">
         {games.map((reviewedGame) => (
           <MyReviewGamesCard
             games={games}

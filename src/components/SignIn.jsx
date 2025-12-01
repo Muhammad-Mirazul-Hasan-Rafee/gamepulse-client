@@ -101,9 +101,7 @@ const SignIn = () => {
 
           {/* 🔸 This paragraph will go BELOW form in mobile */}
           <p className="text-sm lg:text-base leading-relaxed mt-6 lg:mt-0 order-3 lg:order-none">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+            Log in to explore the game reviews and share your thoughts!
           </p>
         </div>
 

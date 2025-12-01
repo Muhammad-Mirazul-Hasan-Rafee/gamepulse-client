@@ -29,38 +29,38 @@ const Navbar = () => {
       <div className="flex justify-center items-center text-[16px] gap-x-2">
         {user && (
           <>
-            <Link
+            <NavLink
               to="/addReview"
               className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
             >
               Add Review
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/myreviews"
               className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
             >
               My Reviews
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/gamewatchlist"
               className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[150px] h-10 bg-slate-800"
             >
               Game WatchList
-            </Link>
+            </NavLink>
           </>
         )}
-        <Link
+        <NavLink
           to="/"
           className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
         >
           Home
-        </Link>
+        </NavLink>
 
-        <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10">
+        <NavLink to="/allreviews" className="bg-slate-800 btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10">
           All Reviews
-        </button>
+        </NavLink>
       </div>
 
       <div className="flex justify-between gap-x-2 ">
