@@ -20,7 +20,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`${styles.paddingX} flex justify-between`}>
+    <div className={`fixed top-0 left-3 right-3  z-50 bg-[rgb(5,8,22)] shadow-lg ${styles.paddingX} flex justify-between  items-center`}>
+
       <div className="flex items-center gap-x-2">
         <img className="w-9 h-9 rounded-full" src={Logo} alt="" />
         <strong className="text-[16px] hidden sm:block">Chill Gamer</strong>
@@ -31,21 +32,21 @@ const Navbar = () => {
           <>
             <NavLink
               to="/addReview"
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
+              className="w-auto h-10 p-2 rounded-3xl bg-slate-800"
             >
               Add Review
             </NavLink>
 
             <NavLink
               to="/myreviews"
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               My Reviews
             </NavLink>
 
             <NavLink
               to="/gamewatchlist"
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[150px] h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               Game WatchList
             </NavLink>
@@ -53,12 +54,12 @@ const Navbar = () => {
         )}
         <NavLink
           to="/"
-          className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10 bg-slate-800"
+          className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
         >
           Home
         </NavLink>
 
-        <NavLink to="/allreviews" className="bg-slate-800 btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-[130px] h-10">
+        <NavLink to="/allreviews" className="w-auto h-9 p-2 rounded-3xl bg-slate-800">
           All Reviews
         </NavLink>
       </div>
@@ -72,10 +73,10 @@ const Navbar = () => {
         </Link> */}
 
         {user ? (
-          <>
+          <div className="flex justify-end items-center gap-2">
             <Link
               to={`/profile/${user?.uid}`}
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-20 h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               Profile
             </Link>
@@ -84,30 +85,30 @@ const Navbar = () => {
            
               <img
                 src={user?.photoURL}
-                className="w-9 h-9 rounded-full"
+                className="w-12 h-12 rounded-full object-cover"
                 alt={user?.displayName}
               />
             </Link>
 
             <Link
               onClick={handleSignOut}
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-20 h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               Log Out
             </Link>
-          </>
+          </div>
         ) : (
           <>
             <Link
               to="/signin"
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-20 h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               Log In
             </Link>
 
             <Link
               to="/signup"
-              className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[16px] w-20 h-10 bg-slate-800"
+              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
             >
               Sign Up
             </Link>

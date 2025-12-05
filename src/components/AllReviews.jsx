@@ -1,46 +1,146 @@
-import React from "react";
-import image from "../assets/Game/Commandos_Strike.jpg";
+import React, { useEffect, useState } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
+import { getAuth } from "firebase/auth";
+import Swal from "sweetalert2";
 
 const AllReviews = () => {
+  const currentUser = getAuth().currentUser;
+  const [reviews, setReviews] = useState([]); //keep all reviews that will be fetched from backend
+  const [expand, setExpand] = useState({}); // tracking see more or see less
+  const [totalLikes, setTotalLikes] = useState({}); //tracking total likes for a specific review
+  const [userLikes, setUserLikes] = useState({}); // current user liked a specific review or not
+  console.log(currentUser);
+  useEffect(() => {
+    // fetching all the reviews
+    fetch("http://localhost:8000/game")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setReviews(data);
+
+        // initiazing like counting and user likes
+        const initalLikes = {}; //storing total likes
+        const initalUserLikes = {}; // storing user liked or not
+
+        // looping every review
+        data.forEach((review) => {
+          initalLikes[review._id] = review.totalLikes ?? 0;
+
+          // checking if current user already liked the current review
+          initalUserLikes[review._id] =
+            currentUser && review.likedBy
+              ? review.likedBy.includes(currentUser?.uid)
+              : false;
+        });
+        setTotalLikes(initalLikes);
+        setUserLikes(initalUserLikes);
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire("Error!", "Failed to fetch reviews", "error");
+      });
+  }, [currentUser]);
+
+  const toggleExpand = (id) => {
+    setExpand((previous) => ({ ...previous, [id]: !previous[id] }));
+  };
+
+  const toggleLike = (id) => {
+    if (!currentUser) {
+      Swal.fire("Error!", "You must be logged in to like a review", "error");
+      return;
+    }
+
+    const previousLiked = userLikes[id]; // if already liked
+    const newLike = !previousLiked; // new state
+    const previousCount = totalLikes[id] ?? 0;
+
+    // instant ui update
+    setUserLikes((previous) => ({ ...previous, [id]: newLike }));
+
+    setTotalLikes((previous) => ({
+      ...previous,
+      [id]: newLike ? (previous[id] ?? 0) + 1 : (previous[id] ?? 0) - 1,
+    }));
+
+    // Update likedBy array of backend  for this(current) review
+    fetch(`http://localhost:8000/game/${id}/like`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ uid: currentUser.uid }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+
+        //set as final which comes from backend
+        setTotalLikes((previous) => ({ ...previous, [id]: data.totalLikes }));
+      })
+      .catch((error) => console.log(error));
+    // Backend fail → rollback both states
+    setUserLikes((previous) => ({ ...previous, [id]: previousLiked }));
+    setTotalLikes((previous) => ({ ...previous, [id]: previousCount }));
+  };
+
   return (
     <div>
       <h2 className="text-sm md:text-2xl">Explore what's on others mind!</h2>
+      <br />
 
-      <main className="flex justify-center">
-        {/* secondary main */}
-        <div className="w-fit grid grid-cols-1 justify-center items-center  bg-slate-900 ">
-          <div className="max-w-fit">
-            {/* Image and Name */}
-            <aside className="flex justify-start items-center gap-x-2 ">
+      {reviews.map((review) => (
+        <main className="grid grid-cols-1">
+          <div
+            key={review._id}
+            className="w-fit grid grid-cols-1 justify-center items-center  bg-slate-900 "
+          >
+            {/* Name . photo */}
+            <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[660px] md:text-lg md:flex justify-start items-center">
               <img
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
-                src={image}
-                alt=""
+                src={currentUser?.photoURL}
+                className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover"
+                alt={currentUser?.displayName}
               />
-              <p className="text-xs font-bold sm:text-sm  md:text-lg">Muhammad Mirazul Hasan Rafee</p>
-            </aside>
+              <p>{currentUser?.displayName}</p>
+            </div>
+
+            {/* Review text */}
+            <div className="sm:w-auto mx-auto md:w-[600px]">
+              <article className="text-sm sm:text-xs md:text-lg text-justify">
+                {expand[review._id]
+                  ? review.reviewDescription
+                  : `${review.reviewDescription.slice(0, 120)}...`}
+              </article>
+
+              {/* see more or see like */}
+              <button
+                onClick={() => toggleExpand(review._id)}
+                className="text-blue-500 text-xs mb-2"
+              >
+                {expand[review._id] ? "See less" : "See more"}
+              </button>
+            </div>
+            {/* Like section */}
+            <section className="sm:w-auto mx-auto text-xs md:w-[600px] md:text-lg flex justify-between gap-1">
+              <div className="flex gap-x-2">
+                <button
+                  onClick={() => {
+                    toggleLike(review._id);
+                  }}
+                  className="text-red-800 text-[16px] sm:text-[17px] md:text-lg cursor-pointer"
+                >
+                  {userLikes[review._id] ? "❤️" : "🤍"}
+                </button>
+                <p className="text-xs flex items-center">
+                  {totalLikes[review._id]}
+                </p>
+              </div>
+              <p>Ratings:{review.rating}</p>
+            </section>
           </div>
-          {/* Game title + Ratings */}
-          <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[600px] md:text-lg md:flex justify-between">
-            <p>Game Title:</p>
-            <img src={image} className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover" alt="" />
-            <p>Ratings:</p>
-          </div>
-          {/* Review text */}
-          <div className="sm:w-auto mx-auto md:w-[600px]">
-            <article className="text-sm sm:text-xs md:text-lg text-justify">
-              Articles for the game will stay here! Lorem ipsum dolor sit amet
-              consectetur, adipisicing elit. Deserunt, molestias debitis rem
-              impedit provident facere laboriosam ullam aut quis nostrum?
-            </article>
-          </div>
-          {/* Like section */}
-          <section className="sm:w-auto mx-auto text-xs md:w-[600px] md:text-lg flex justify-start gap-1">
-            <p className="text-red-800 text-[16px] sm:text-[17px] md:text-lg">❤</p>
-            <p className="text-xs flex items-center">100</p>
-          </section>
-        </div>
-      </main>
+        </main>
+      ))}
     </div>
   );
 };
