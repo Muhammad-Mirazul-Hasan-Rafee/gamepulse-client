@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+
 import Swal from "sweetalert2";
 import { AuthContext } from "../Providers/AuthProvider";
+import { useContext } from "react";
 
 const AddReview = () => {
   const {user} = useContext(AuthContext);
@@ -28,6 +29,7 @@ const AddReview = () => {
       publishingYear,
       thumbnail,
       genres,
+      
     };
 
     console.log(newGame);

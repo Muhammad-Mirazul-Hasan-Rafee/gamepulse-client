@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-3 right-3  z-50 bg-[rgb(5,8,22)] shadow-lg ${styles.paddingX} flex justify-between  items-center`}>
+    <div className={`fixed top-0 left-3 right-3 z-50 bg-[rgb(5,8,22)] shadow-lg ${styles.paddingX} flex justify-between  items-center`}>
 
       <div className="flex items-center gap-x-2">
         <img className="w-9 h-9 rounded-full" src={Logo} alt="" />

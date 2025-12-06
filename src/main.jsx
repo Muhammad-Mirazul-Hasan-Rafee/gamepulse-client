@@ -4,8 +4,6 @@ import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  NavLink,
-  Navigate,
 } from "react-router-dom";
 import "./index.css";
 import Root from "./components/Root.jsx";
@@ -19,9 +17,9 @@ import MyReviews from "./components/MyReviews.jsx";
 import GameWatchList from "./components/GameWatchList.jsx";
 import Profile from "./components/Profile.jsx";
 import AllReviews from "./components/AllReviews.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-
-
+const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
@@ -69,11 +67,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <RouterProvider router={router} />
      
     </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

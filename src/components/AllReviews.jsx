@@ -1,52 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { AuthContext } from "../Providers/AuthProvider";
-import { getAuth } from "firebase/auth";
+import React, { useContext, useEffect, useState } from "react";
+
 import Swal from "sweetalert2";
+import { AuthContext } from "../Providers/AuthProvider";
+import { useReviews } from "./CustomHooks/useReviews";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AllReviews = () => {
-  const currentUser = getAuth().currentUser;
-  const [reviews, setReviews] = useState([]); //keep all reviews that will be fetched from backend
+  const { user } = useContext(AuthContext);
+ // const [reviews, setReviews] = useState([]); //keep all reviews that will be fetched from backend
   const [expand, setExpand] = useState({}); // tracking see more or see less
   const [totalLikes, setTotalLikes] = useState({}); //tracking total likes for a specific review
   const [userLikes, setUserLikes] = useState({}); // current user liked a specific review or not
-  console.log(currentUser);
-  useEffect(() => {
-    // fetching all the reviews
-    fetch("http://localhost:8000/game")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setReviews(data);
+const queryClient = useQueryClient();
+  // Fetching reviews through React Query
 
-        // initiazing like counting and user likes
+  const {data: reviews =[] , isLoading , error} = useReviews();
+
+
+
+
+  useEffect(() => {
+      if(!reviews || reviews.length === 0) return;
+
+
+    // initiazing like counting and user likes    
         const initalLikes = {}; //storing total likes
         const initalUserLikes = {}; // storing user liked or not
 
         // looping every review
-        data.forEach((review) => {
-          initalLikes[review._id] = review.totalLikes ?? 0;
+        reviews.forEach((review) => {
+          initalLikes[review._id] = review.totalLikes || 0;
 
           // checking if current user already liked the current review
           initalUserLikes[review._id] =
-            currentUser && review.likedBy
-              ? review.likedBy.includes(currentUser?.uid)
-              : false;
+            user && review.likedBy ? review.likedBy.includes(user.uid) : false;
         });
         setTotalLikes(initalLikes);
         setUserLikes(initalUserLikes);
-      })
-      .catch((error) => {
-        console.log(error);
-        Swal.fire("Error!", "Failed to fetch reviews", "error");
-      });
-  }, [currentUser]);
+      },
+  [reviews , user]);
 
+
+  // Expand or collapse text
   const toggleExpand = (id) => {
     setExpand((previous) => ({ ...previous, [id]: !previous[id] }));
   };
 
+  // handle like
   const toggleLike = (id) => {
-    if (!currentUser) {
+    if (!user) {
       Swal.fire("Error!", "You must be logged in to like a review", "error");
       return;
     }
@@ -60,7 +62,7 @@ const AllReviews = () => {
 
     setTotalLikes((previous) => ({
       ...previous,
-      [id]: newLike ? (previous[id] ?? 0) + 1 : (previous[id] ?? 0) - 1,
+      [id]: newLike ? previousCount + 1 :  Math.max(0 , previousCount - 1),
     }));
 
     // Update likedBy array of backend  for this(current) review
@@ -69,7 +71,7 @@ const AllReviews = () => {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ uid: currentUser.uid }),
+      body: JSON.stringify({ uid: user.uid }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -77,20 +79,26 @@ const AllReviews = () => {
 
         //set as final which comes from backend
         setTotalLikes((previous) => ({ ...previous, [id]: data.totalLikes }));
-      })
-      .catch((error) => console.log(error));
-    // Backend fail → rollback both states
-    setUserLikes((previous) => ({ ...previous, [id]: previousLiked }));
-    setTotalLikes((previous) => ({ ...previous, [id]: previousCount }));
-  };
 
+        queryClient.invalidateQueries(['reviews']);
+      })
+      .catch((error) => {
+        console.log(error);
+        // Backend fail → rollback both states
+        setUserLikes((previous) => ({ ...previous, [id]: previousLiked }));
+        setTotalLikes((previous) => ({ ...previous, [id]: previousCount }));
+      });
+  };
+// Handle loading state
+  if (isLoading) return <p>Loading reviews...</p>;
+  if (error) return <p>Error loading reviews!</p>;
   return (
     <div>
       <h2 className="text-sm md:text-2xl">Explore what's on others mind!</h2>
       <br />
 
       {reviews.map((review) => (
-        <main className="grid grid-cols-1">
+        <main className="grid grid-cols-1 md:flex justify-center">
           <div
             key={review._id}
             className="w-fit grid grid-cols-1 justify-center items-center  bg-slate-900 "
@@ -98,11 +106,11 @@ const AllReviews = () => {
             {/* Name . photo */}
             <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[660px] md:text-lg md:flex justify-start items-center">
               <img
-                src={currentUser?.photoURL}
+                src={user?.photoURL}
                 className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover"
-                alt={currentUser?.displayName}
+                alt={user?.displayName}
               />
-              <p>{currentUser?.displayName}</p>
+              <p>{user?.displayName}</p>
             </div>
 
             {/* Review text */}
@@ -116,7 +124,7 @@ const AllReviews = () => {
               {/* see more or see like */}
               <button
                 onClick={() => toggleExpand(review._id)}
-                className="text-blue-500 text-xs mb-2"
+                className="text-white text-xs mb-2"
               >
                 {expand[review._id] ? "See less" : "See more"}
               </button>
