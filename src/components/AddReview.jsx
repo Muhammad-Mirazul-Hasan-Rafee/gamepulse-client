@@ -1,12 +1,12 @@
-
 import Swal from "sweetalert2";
 import { AuthContext } from "../Providers/AuthProvider";
 import { useContext } from "react";
 
 const AddReview = () => {
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
+     console.log("Logged-in User:", user);
 
     const form = e.target;
     const gameTitle = form.gametitle.value;
@@ -17,10 +17,12 @@ const AddReview = () => {
     const publishingYear = form.publishingyear.value;
     const thumbnail = form.thumbnail.value;
     const genres = form.genres.value;
-    
 
     const newGame = {
-       uid: user.uid,
+      userName: user?.displayName,
+      userPhoto: user?.photoURL,
+      userEmail: user?.email,
+      uid: user?.uid,
       gameTitle,
       reviewDescription,
       name,
@@ -29,7 +31,6 @@ const AddReview = () => {
       publishingYear,
       thumbnail,
       genres,
-      
     };
 
     console.log(newGame);
@@ -47,7 +48,6 @@ const AddReview = () => {
         console.log(data);
 
         if (data.insertedId) {
-        
           Swal.fire({
             title: "Hurrah!",
             text: "Review inserted successfully!",
@@ -55,7 +55,6 @@ const AddReview = () => {
             imageWidth: 400,
             imageHeight: 200,
             imageAlt: gameTitle,
-             
           });
         }
       });

@@ -1,28 +1,28 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FcDeleteRow } from "react-icons/fc";
 import Swal from "sweetalert2";
 
 const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
-  const {_id} = reviewedGame;
+  const { _id } = reviewedGame;
   const [showModal, setShowModal] = useState(false);
+  const [expand, setExpand] = useState({});
 
+  const [title, setTitle] = useState(reviewedGame.gameTitle);
+  const [reViewDes, setDes] = useState(reviewedGame.reviewDescription);
+  const [thumb, setThumb] = useState(reviewedGame.thumbnail);
 
+  // Update expand = see more or see less
 
-  const [title , setTitle] = useState(reviewedGame.gameTitle);
-  const [reViewDes , setDes] = useState(reviewedGame.reviewDescription);
-  const [thumb , setThumb] = useState(reviewedGame.thumbnail);
+  const tapExpand = (id) => {
+    setExpand((previous)=>({...previous, [id]: !previous[id]}))
+  };
 
   // ---------------------------------------------------------------------------------------
   // .............................Update handler............................................
   // ---------------------------------------------------------------------------------------
   const handleUpdate = (e) => {
     e.preventDefault();
-
-    // const form = e.target;
-    // const updatedTitle = form.gametitle.value;
-    // const updatedDescription = form.reviewdescription.value;
-    // const updatedThumb = form.thumbnail.value;
 
     const updatedGame = {
       gameTitle: title,
@@ -48,7 +48,9 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
           });
 
           // updating card state without reload
-          const remainingUpdate = games.map((game)=> game._id === _id ? {...game , ...updatedGame} : game);
+          const remainingUpdate = games.map((game) =>
+            game._id === _id ? { ...game, ...updatedGame } : game
+          );
           setGames(remainingUpdate);
 
           // modal closes
@@ -83,45 +85,65 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
   };
 
   return (
-    <>
+    <main
+      key={reviewedGame._id}
+      className="flex justify-center sm:w-auto mx-auto md:w-[600px]"
+    >
       {/* ------- Game Card----- */}
-      <div className="p-4 w-full space-y-3 bg-base-100 shadow-md rounded-xl">
-        <div className="flex justify-between">
+      <div className="w-full p-5 bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border border-gray-800 hover:shadow-[0_0_25px_rgba(255,215,0,0.15)] transition-all duration-300 group ">
+        {/* Top Section */}
+        <div className="flex items-start justify-between">
+          {/* Thumbnail */}
           <img
             src={reviewedGame.thumbnail}
             alt={reviewedGame.gameTitle}
-            className="w-28 h-28 object-cover rounded-lg"
+            className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-xl border border-gray-700 shadow-lg group-hover:scale-[1.03] transition"
           />
 
-          <div className="flex justify-end gap-4 sm:w-1/3">
-            {/*  modal toggle */}
+          {/* Buttons */}
+          <div className="flex gap-3">
             <button
               onClick={() => setShowModal(true)}
-              className="h-6 text-xl p-2 bg-gray-800 text-yellow-300 rounded-lg hover:scale-110 transition"
+              className="p-2 rounded-xl bg-gray-800 border border-gray-700 text-yellow-300 hover:bg-gray-900 hover:border-gray-600 hover:scale-110 transition-all"
             >
-              <FaEdit />
+              <FaEdit className="text-xl" />
             </button>
 
             <button
               onClick={() => handleDelete(_id)}
-              className="h-6 text-xl p-2 bg-red-700 text-white rounded-lg hover:scale-110 transition"
+              className="p-2 rounded-xl bg-red-800 border border-red-900 text-white hover:bg-red-700 hover:scale-110 transition-all"
             >
-              <FcDeleteRow />
+              <FcDeleteRow className="text-xl" />
             </button>
           </div>
         </div>
 
-        <div className="mt-4 space-y-2 text-sm sm:text-base">
-          <aside className="flex justify-between">
-            <h2 className="text-2xl font-bold text-yellow-400">{reviewedGame.gameTitle}</h2>
-            <p className="font-bold text-sm flex justify-center items-center ml-3">
-              Rating: {reviewedGame.rating}
-            </p>
-          </aside>
+        {/* Text Content */}
+        <div className="mt-4 space-y-3">
+          {/* Title + Rating */}
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-yellow-400 tracking-wide group-hover:text-yellow-300 transition">
+              {reviewedGame.gameTitle}
+            </h2>
 
-          <p className="text-gray-300 text-sm leading-relaxed">
-            {reviewedGame.reviewDescription}
-          </p>
+            <span className="px-3 py-1 text-sm font-semibold text-yellow-300 bg-gray-800 rounded-lg border border-gray-700 shadow-sm">
+              ⭐ {reviewedGame.rating}
+            </span>
+          </div>
+
+          {/* Description */}
+          <article className="text-gray-300 leading-relaxed text-sm sm:text-xs md:text-lg  text-justify">
+            {
+              expand[reviewedGame._id] ? reviewedGame.reviewDescription : `${reviewedGame.reviewDescription.slice(0,120)}...`
+            }
+          </article>
+          {/* see more or see like */}
+          <button
+            onClick={() => tapExpand(reviewedGame._id)}
+            className="text-white text-xs mb-2 cursor-pointer"
+          >
+            {expand[reviewedGame._id] ? "See less" : "See more"}
+          </button>
         </div>
       </div>
 
@@ -138,8 +160,8 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
               <input
                 type="text"
                 name="gametitle"
-              value={title}
-              onChange={(e)=>setTitle(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-2 mb-3 bg-black border border-white"
                 required
               />
@@ -149,7 +171,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
                 type="text"
                 name="reviewdescription"
                 value={reViewDes}
-                onChange={(e)=>setDes(e.target.value)}
+                onChange={(e) => setDes(e.target.value)}
                 className="w-full p-2 mb-3 bg-black border border-white"
                 required
               />
@@ -159,8 +181,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
                 type="text"
                 name="thumbnail"
                 value={thumb}
-                onChange={(e)=>setThumb(e.target.value)}
-            
+                onChange={(e) => setThumb(e.target.value)}
                 className="w-full p-2 mb-4 bg-black border border-white"
                 required
               />
@@ -186,7 +207,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
           </div>
         </div>
       )}
-    </>
+    </main>
   );
 };
 

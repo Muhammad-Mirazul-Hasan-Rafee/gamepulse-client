@@ -101,7 +101,7 @@ const Footer = () => {
         className="text-center text-gray-500 text-sm mt-12 border-t border-gray-800 pt-5"
       >
         © {new Date().getFullYear()} 
-        <span className="text-purple-400 font-semibold"> RafeeArena</span> — All rights reserved.
+        <span className="text-purple-400 font-semibold"> Chill Gamer</span> — All rights reserved.
         <br />
         <span className="text-xs text-gray-600">Made with ❤️ by Rafee</span>
       </motion.div>

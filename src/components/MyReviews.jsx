@@ -6,6 +6,7 @@ const MyReviews = () => {
   const { user } = useContext(AuthContext);
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
 
   useEffect(() => {
     if (!user?.uid) {
@@ -47,7 +48,7 @@ const MyReviews = () => {
   return (
     <div className="px-2">
       <h3 className="text-4xl text-white">My reviews:</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-40 ">
+      <div className="sm:grid grid-cols-1 md:flex justify-center w-auto ">
         {games.map((reviewedGame) => (
           <MyReviewGamesCard
             games={games}

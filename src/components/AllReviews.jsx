@@ -12,15 +12,18 @@ const AllReviews = () => {
   const [totalLikes, setTotalLikes] = useState({}); //tracking total likes for a specific review
   const [userLikes, setUserLikes] = useState({}); // current user liked a specific review or not
 const queryClient = useQueryClient();
-  // Fetching reviews through React Query
 
+
+  // Fetching reviews through React Query
   const {data: reviews =[] , isLoading , error} = useReviews();
 
 
-
-
   useEffect(() => {
-      if(!reviews || reviews.length === 0) return;
+      if(!reviews || reviews.length === 0){
+        setTotalLikes({});
+      setUserLikes({});
+      return;
+      };
 
 
     // initiazing like counting and user likes    
@@ -33,7 +36,7 @@ const queryClient = useQueryClient();
 
           // checking if current user already liked the current review
           initalUserLikes[review._id] =
-            user && review.likedBy ? review.likedBy.includes(user.uid) : false;
+            user && Array.isArray(review.likedBy) ? review.likedBy.includes(user.uid) : false;
         });
         setTotalLikes(initalLikes);
         setUserLikes(initalUserLikes);
@@ -98,33 +101,34 @@ const queryClient = useQueryClient();
       <br />
 
       {reviews.map((review) => (
-        <main className="grid grid-cols-1 md:flex justify-center">
+        <main key={review._id} className="grid grid-cols-1 md:flex justify-center">
           <div
-            key={review._id}
+            
             className="w-fit grid grid-cols-1 justify-center items-center  bg-slate-900 "
           >
             {/* Name . photo */}
             <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[660px] md:text-lg md:flex justify-start items-center">
               <img
-                src={user?.photoURL}
+                src={review.userPhoto}
                 className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover"
-                alt={user?.displayName}
+                alt={review.userName}
               />
-              <p>{user?.displayName}</p>
+              <p>{review.userName}</p>
             </div>
 
             {/* Review text */}
             <div className="sm:w-auto mx-auto md:w-[600px]">
-              <article className="text-sm sm:text-xs md:text-lg text-justify">
+              <article className="text-sm sm:text-xs md:text-lg mx-auto">
                 {expand[review._id]
                   ? review.reviewDescription
                   : `${review.reviewDescription.slice(0, 120)}...`}
               </article>
 
+          
               {/* see more or see like */}
               <button
                 onClick={() => toggleExpand(review._id)}
-                className="text-white text-xs mb-2"
+                className="text-white text-xs mb-2 cursor-pointer"
               >
                 {expand[review._id] ? "See less" : "See more"}
               </button>
@@ -144,7 +148,7 @@ const queryClient = useQueryClient();
                   {totalLikes[review._id]}
                 </p>
               </div>
-              <p>Ratings:{review.rating}</p>
+              <p className="text-yellow-600">Ratings: <span className="text-white">{review.rating}</span></p>
             </section>
           </div>
         </main>

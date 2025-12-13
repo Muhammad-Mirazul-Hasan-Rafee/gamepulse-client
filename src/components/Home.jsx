@@ -23,7 +23,7 @@ const handleSubmit = (e) => {
 const Home = () => {
   return (
     <div
-      className={`${styles.paddingX} mt-12 h-auto border border-white text-white`}
+      className={`${styles.paddingX} mt-12 h-auto text-white`}
     >
 
               {/*Discord image */}
