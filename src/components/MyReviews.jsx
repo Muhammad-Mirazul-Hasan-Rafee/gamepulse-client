@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import MyReviewGamesCard from "./myReviewGamesCard";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const MyReviews = () => {
