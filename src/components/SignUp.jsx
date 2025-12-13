@@ -175,7 +175,7 @@ const SignUp = () => {
               </p>
             </div>
 
-            <div className="mt-[22px] flex justify-end">
+            <div className="mt-[23px] flex justify-end">
               <button className="btn btn-primary w-28 h-10">Sign Up</button>
             </div>
           </form>
