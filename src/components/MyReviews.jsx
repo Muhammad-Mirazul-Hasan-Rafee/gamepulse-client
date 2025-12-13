@@ -48,7 +48,7 @@ const MyReviews = () => {
   return (
     <div className="px-2">
       <h3 className="text-4xl text-white">My reviews:</h3>
-      <div className="sm:grid grid-cols-1 md:flex justify-center w-auto ">
+      <div className="sm:grid grid-cols-1 md:grid-cols-1 justify-items-center w-auto ">
         {games.map((reviewedGame) => (
           <MyReviewGamesCard
             games={games}
