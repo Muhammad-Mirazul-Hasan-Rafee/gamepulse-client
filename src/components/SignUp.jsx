@@ -168,14 +168,14 @@ const SignUp = () => {
                 Forgot password?
               </a>
               <p className="text-right">
-                Already have an Account?{" "}
+                Already have an account?{" "}
                 <Link to="/signin" className="text-blue-500 hover:underline">
                   Log in here
                 </Link>
               </p>
             </div>
 
-            <div className="mt-5 flex justify-end">
+            <div className="mt-[22px] flex justify-end">
               <button className="btn btn-primary w-28 h-10">Sign Up</button>
             </div>
           </form>

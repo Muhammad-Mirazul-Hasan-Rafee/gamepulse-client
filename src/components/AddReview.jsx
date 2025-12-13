@@ -36,7 +36,7 @@ const AddReview = () => {
     console.log(newGame);
 
     // Sending data to the server
-    fetch("http://localhost:8000/game", {
+    fetch("https://chill-gamer-server-fawn.vercel.app/game", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -57,6 +57,7 @@ const AddReview = () => {
             imageAlt: gameTitle,
           });
         }
+       
       });
   };
   return (

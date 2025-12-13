@@ -31,7 +31,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
     };
 
     // .....................  Sending to server  ..................................
-    fetch(`http://localhost:8000/game/${_id}`, {
+    fetch(`https://chill-gamer-server-fawn.vercel.app/game/${_id}`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(updatedGame),
@@ -68,7 +68,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
       showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:8000/game/${_id}`, {
+        fetch(`https://chill-gamer-server-fawn.vercel.app/game/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
@@ -126,7 +126,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
               {reviewedGame.gameTitle}
             </h2>
 
-            <span className="px-3 py-1 text-sm font-semibold text-yellow-300 bg-gray-800 rounded-lg border border-gray-700 shadow-sm">
+            <span className="px-3 py-1 text-sm font-semibold text-yellow-300 bg-gray-800 rounded-lg border border-gray-700 shadow-sm w-20 flex justify-center">
               ⭐ {reviewedGame.rating}
             </span>
           </div>

@@ -3,15 +3,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCGQiGUxMFKlcZjvwUhIVTZuvMP9TxgefE",
-  authDomain: "chill-gamer-review-app.firebaseapp.com",
-  projectId: "chill-gamer-review-app",
-  storageBucket: "chill-gamer-review-app.firebasestorage.app",
-  messagingSenderId: "589195081121",
-  appId: "1:589195081121:web:3ac98e0144e3436f58c7e0"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
+//... Initialize Firebase...
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service

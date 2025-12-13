@@ -18,7 +18,7 @@ const MyReviews = () => {
     );
   }
 
-    fetch(`http://localhost:8000/game?uid=${user.uid}`)
+    fetch(`https://chill-gamer-server-fawn.vercel.app/game?uid=${user.uid}`)
       .then((res) => res.json()) 
       .then((data) => {
         if (Array.isArray(data)) {
