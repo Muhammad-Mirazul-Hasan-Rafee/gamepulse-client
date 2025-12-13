@@ -5,6 +5,14 @@ import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Navbar = () => {
+const getNavLinkClass = ({ isActive }) => {
+    return `w-auto h-10 p-2 rounded-3xl transition-all duration-300 flex items-center justify-center text-white ${
+      isActive
+        ? "bg-gradient-to-br from-gray-900 to-black border border-gray-800 shadow-2xl hover:shadow-[0_0_25px_rgba(255,215,0,0.15)]"
+        : "bg-slate-800 hover:bg-slate-700"
+    }`;
+  };
+
   const { user, signOutUser, loading } = useContext(AuthContext);
   if (loading) {
     return <div>Loading...</div>;
@@ -20,8 +28,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-3 right-3 z-50 bg-[rgb(5,8,22)] shadow-lg ${styles.paddingX} flex justify-between  items-center`}>
-
+    <div
+      className={`fixed top-0 left-3 right-3 z-50 bg-[rgb(5,8,22)] shadow-lg ${styles.paddingX} flex justify-between  items-center`}
+    >
       <div className="flex items-center gap-x-2">
         <img className="w-9 h-9 rounded-full" src={Logo} alt="" />
         <strong className="text-[16px] hidden sm:block">Chill Gamer</strong>
@@ -32,34 +41,34 @@ const Navbar = () => {
           <>
             <NavLink
               to="/addReview"
-              className="w-auto h-10 p-2 rounded-3xl bg-slate-800"
+              className={getNavLinkClass}
             >
               Add Review
             </NavLink>
 
             <NavLink
               to="/myreviews"
-              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
+              className={getNavLinkClass}
             >
               My Reviews
             </NavLink>
 
             <NavLink
               to="/gamewatchlist"
-              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
+              className={getNavLinkClass}
             >
               Game WatchList
             </NavLink>
           </>
         )}
-        <NavLink
-          to="/"
-          className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
-        >
+        <NavLink to="/" className={getNavLinkClass}>
           Home
         </NavLink>
 
-        <NavLink to="/allreviews" className="w-auto h-9 p-2 rounded-3xl bg-slate-800">
+        <NavLink
+          to="/allreviews"
+          className={getNavLinkClass}
+        >
           All Reviews
         </NavLink>
       </div>
@@ -76,13 +85,12 @@ const Navbar = () => {
           <div className="flex justify-end items-center gap-2">
             <Link
               to={`/profile/${user?.uid}`}
-              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
+              className={`${getNavLinkClass({ isActive: true })} w-auto h-9 p-2 rounded-3xl bg-slate-800`}
             >
               Profile
             </Link>
 
             <Link to={`profile/${user?.uid}`}>
-           
               <img
                 src={user?.photoURL}
                 className="w-12 h-12 rounded-full object-cover"
@@ -92,7 +100,7 @@ const Navbar = () => {
 
             <Link
               onClick={handleSignOut}
-              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
+              className={`${getNavLinkClass({ isActive: true })} w-auto h-9 p-2 rounded-3xl bg-slate-800`}
             >
               Log Out
             </Link>
@@ -101,7 +109,7 @@ const Navbar = () => {
           <>
             <Link
               to="/signin"
-              className="w-auto h-9 p-2 rounded-3xl bg-slate-800"
+               className={`${getNavLinkClass({ isActive: true })} w-auto h-9 p-2 rounded-3xl bg-slate-800`}
             >
               Log In
             </Link>

@@ -104,7 +104,7 @@ const queryClient = useQueryClient();
         <main key={review._id} className="grid grid-cols-1 md:flex justify-center">
           <div
             
-            className="w-fit grid grid-cols-1 justify-center items-center  bg-slate-900 "
+            className="w-fit grid grid-cols-1 justify-center items-center bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border border-gray-800 hover:shadow-[0_0_25px_rgba(255,215,0,0.15)] transition-all duration-300 group"
           >
             {/* Name . photo */}
             <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[660px] md:text-lg md:flex justify-start items-center">
