@@ -121,7 +121,7 @@ A lightweight profile screen showing:
    
    VITE_apiKey=yourKey
    VITE_authDomain=...
-   VITE_backend_url=https://chill-gamer-server-fawn.vercel.app
+   VITE_backend_url=https://chill-gamer-server1-r58yveu40-hasan-rafees-projects.vercel.app
    
 4. Start the development server:
 

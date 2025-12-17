@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       //  {
       //   path: "updatedgames/:id",
       //   element: <PrivateRoute><UpdatedGames></UpdatedGames></PrivateRoute>,
-      //   loader:({params})=> fetch(`https://chill-gamer-server-fawn.vercel.app/game/${params.id}`)
+      //   loader:({params})=> fetch(`https://chill-gamer-server1-r58yveu40-hasan-rafees-projects.vercel.app/game/${params.id}`)
       // },
 
       {
