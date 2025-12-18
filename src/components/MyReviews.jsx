@@ -18,7 +18,7 @@ const MyReviews = () => {
     );
   }
 
-    fetch(`https://chill-gamer-server1-r58yveu40-hasan-rafees-projects.vercel.app/game?uid=${user.uid}`)
+    fetch(`https://chill-gamer-server-eight-lac.vercel.app//game?uid=${user.uid}`)
       .then((res) => res.json()) 
       .then((data) => {
         if (Array.isArray(data)) {
