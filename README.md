@@ -133,7 +133,7 @@ A lightweight profile screen showing:
 
 ## 🌐 Live Demo
 
-https://chill-gamer-users.vercel.app
+https://gamepulse-user.vercel.app
 
 
 
