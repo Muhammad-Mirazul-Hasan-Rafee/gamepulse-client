@@ -18,7 +18,7 @@ const MyReviews = () => {
     );
   }
 
-    fetch(`https://chill-gamer-userserver.vercel.app/game?uid=${user.uid}`)
+    fetch(`gamepulse-server.vercel.app/game?uid=${user.uid}`)
       .then((res) => res.json()) 
       .then((data) => {
         if (Array.isArray(data)) {

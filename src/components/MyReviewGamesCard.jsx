@@ -31,7 +31,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
     };
 
     // .....................  Sending to server  ..................................
-    fetch(`https://chill-gamer-userserver.vercel.app/game/${_id}`, {
+    fetch(`gamepulse-server.vercel.app/game/${_id}`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(updatedGame),
@@ -68,7 +68,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
       showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://chill-gamer-userserver.vercel.app/game/${_id}`, {
+        fetch(`gamepulse-server.vercel.app/game/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

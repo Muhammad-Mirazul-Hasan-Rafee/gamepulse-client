@@ -69,7 +69,7 @@ const queryClient = useQueryClient();
     }));
 
     // Update likedBy array of backend  for this(current) review
-    fetch(`https://chill-gamer-userserver.vercel.app/game/${id}/like`, {
+    fetch(`gamepulse-server.vercel.app/game/${id}/like`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

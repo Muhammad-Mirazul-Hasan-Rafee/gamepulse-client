@@ -36,7 +36,7 @@ const AddReview = () => {
     console.log(newGame);
 
     // Sending data to the server
-    fetch("https://chill-gamer-userserver.vercel.app/game", {
+    fetch("gamepulse-server.vercel.app/game", {
       method: "POST",
       headers: {
         "content-type": "application/json",

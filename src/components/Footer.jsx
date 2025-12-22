@@ -42,7 +42,7 @@ const Footer = () => {
         <div>
           <div className="flex items-center gap-3 mb-3">
             <FaGamepad className="text-purple-500 text-3xl animate-pulse" />
-            <h2 className="text-xl font-bold text-white tracking-wide">Chill Gamer by RafeeArena</h2>
+            <h2 className="text-xl font-bold text-white tracking-wide">GamePulse by RafeeArena</h2>
           </div>
           <p className="text-gray-400 text-sm leading-6">
             Power up your gaming world — Explore, Review & Share your favorite games.  
@@ -101,7 +101,7 @@ const Footer = () => {
         className="text-center text-gray-500 text-sm mt-12 border-t border-gray-800 pt-5"
       >
         © {new Date().getFullYear()} 
-        <span className="text-purple-400 font-semibold"> Chill Gamer</span> — All rights reserved.
+        <span className="text-purple-400 font-semibold"> GamePulse</span> — All rights reserved.
         <br />
         <span className="text-xs text-gray-600">Made with ❤️ by Rafee</span>
       </motion.div>

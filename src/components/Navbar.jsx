@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo and app img/gamepulse-logo.png";
 import styles from "../styles";
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
@@ -33,7 +33,7 @@ const getNavLinkClass = ({ isActive }) => {
     >
       <div className="flex items-center gap-x-2">
         <img className="w-9 h-9 rounded-full" src={Logo} alt="" />
-        <strong className="text-[16px] hidden sm:block">Chill Gamer</strong>
+        <strong className="text-[16px] hidden sm:block">GamePulse</strong>
       </div>
 
       <div className="flex justify-center items-center text-[16px] gap-x-2">

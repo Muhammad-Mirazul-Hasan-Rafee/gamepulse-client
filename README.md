@@ -1,4 +1,4 @@
-# 🎮 Chill Gamer — Frontend (React)
+# 🎮 GamePulse — Frontend (React)
 
 A modern, interactive game review platform where users can create, manage, and explore reviews with a dynamic UI, smooth animations, secure authentication, and real-time features.
 Built for performance, clarity, and an engaging user experience.
@@ -121,7 +121,7 @@ A lightweight profile screen showing:
    
    VITE_apiKey=yourKey
    VITE_authDomain=...
-   VITE_backend_url=https://chill-gamer-userserver.vercel.app
+   VITE_backend_url=gamepulse-server.vercel.app
    
 4. Start the development server:
 
@@ -139,4 +139,4 @@ https://chill-gamer-users.vercel.app
 
 ## 📌 Summary
 
-The Chill Gamer frontend is built for usability, performance, and visual delight. With secure authentication, real-time updates, and a refined UI, it delivers a smooth review-sharing experience for gamers.
+The GamePulse frontend is built for usability, performance, and visual delight. With secure authentication, real-time updates, and a refined UI, it delivers a smooth review-sharing experience for gamers.
