@@ -18,7 +18,7 @@ const MyReviews = () => {
     );
   }
 
-    fetch(`gamepulse-server.vercel.app/game?uid=${user.uid}`)
+    fetch(`https://gamepulse-server.onrender.com/game?uid=${user.uid}`)
       .then((res) => res.json()) 
       .then((data) => {
         if (Array.isArray(data)) {

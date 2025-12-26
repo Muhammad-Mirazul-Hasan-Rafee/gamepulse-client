@@ -121,7 +121,7 @@ A lightweight profile screen showing:
    
    VITE_apiKey=yourKey
    VITE_authDomain=...
-   VITE_backend_url=gamepulse-server.vercel.app
+   VITE_backend_url=https://gamepulse-server.onrender.com
    
 4. Start the development server:
 

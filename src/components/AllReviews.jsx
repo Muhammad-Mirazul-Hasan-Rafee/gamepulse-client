@@ -7,42 +7,39 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const AllReviews = () => {
   const { user } = useContext(AuthContext);
- // const [reviews, setReviews] = useState([]); //keep all reviews that will be fetched from backend
+  // const [reviews, setReviews] = useState([]); //keep all reviews that will be fetched from backend
   const [expand, setExpand] = useState({}); // tracking see more or see less
   const [totalLikes, setTotalLikes] = useState({}); //tracking total likes for a specific review
   const [userLikes, setUserLikes] = useState({}); // current user liked a specific review or not
-const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient();
 
   // Fetching reviews through React Query
-  const {data: reviews =[] , isLoading , error} = useReviews();
-
+  const { data: reviews = [], isLoading, error } = useReviews();
 
   useEffect(() => {
-      if(!reviews || reviews.length === 0){
-        setTotalLikes({});
+    if (!reviews || reviews.length === 0) {
+      setTotalLikes({});
       setUserLikes({});
       return;
-      };
+    }
 
+    // initiazing like counting and user likes
+    const initalLikes = {}; //storing total likes
+    const initalUserLikes = {}; // storing user liked or not
 
-    // initiazing like counting and user likes    
-        const initalLikes = {}; //storing total likes
-        const initalUserLikes = {}; // storing user liked or not
+    // looping every review
+    reviews.forEach((review) => {
+      initalLikes[review._id] = review.totalLikes || 0;
 
-        // looping every review
-        reviews.forEach((review) => {
-          initalLikes[review._id] = review.totalLikes || 0;
-
-          // checking if current user already liked the current review
-          initalUserLikes[review._id] =
-            user && Array.isArray(review.likedBy) ? review.likedBy.includes(user.uid) : false;
-        });
-        setTotalLikes(initalLikes);
-        setUserLikes(initalUserLikes);
-      },
-  [reviews , user]);
-
+      // checking if current user already liked the current review
+      initalUserLikes[review._id] =
+        user && Array.isArray(review.likedBy)
+          ? review.likedBy.includes(user.uid)
+          : false;
+    });
+    setTotalLikes(initalLikes);
+    setUserLikes(initalUserLikes);
+  }, [reviews, user]);
 
   // Expand or collapse text
   const toggleExpand = (id) => {
@@ -65,11 +62,11 @@ const queryClient = useQueryClient();
 
     setTotalLikes((previous) => ({
       ...previous,
-      [id]: newLike ? previousCount + 1 :  Math.max(0 , previousCount - 1),
+      [id]: newLike ? previousCount + 1 : Math.max(0, previousCount - 1),
     }));
 
     // Update likedBy array of backend  for this(current) review
-    fetch(`gamepulse-server.vercel.app/game/${id}/like`, {
+    fetch(`https://gamepulse-server.onrender.com/game/${id}/like`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -83,7 +80,7 @@ const queryClient = useQueryClient();
         //set as final which comes from backend
         setTotalLikes((previous) => ({ ...previous, [id]: data.totalLikes }));
 
-        queryClient.invalidateQueries(['reviews']);
+        queryClient.invalidateQueries(["reviews"]);
       })
       .catch((error) => {
         console.log(error);
@@ -92,7 +89,7 @@ const queryClient = useQueryClient();
         setTotalLikes((previous) => ({ ...previous, [id]: previousCount }));
       });
   };
-// Handle loading state
+  // Handle loading state
   if (isLoading) return <p>Loading reviews...</p>;
   if (error) return <p>Error loading reviews!</p>;
   return (
@@ -101,11 +98,11 @@ const queryClient = useQueryClient();
       <br />
 
       {reviews.map((review) => (
-        <main key={review._id} className="grid grid-cols-1 md:flex justify-center">
-          <div
-            
-            className="w-fit grid grid-cols-1 justify-center items-center bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border border-gray-800 hover:shadow-[0_0_25px_rgba(255,215,0,0.15)] transition-all duration-300 group"
-          >
+        <main
+          key={review._id}
+          className="grid grid-cols-1 md:flex justify-center"
+        >
+          <div className="w-fit grid grid-cols-1 justify-center items-center bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border border-gray-800 hover:shadow-[0_0_25px_rgba(255,215,0,0.15)] transition-all duration-300 group">
             {/* Name . photo */}
             <div className="sm:w-auto text-xs mx-auto sm:grid sm:grid-cols-2 md:w-[660px] md:text-lg md:flex justify-start items-center">
               <img
@@ -124,7 +121,6 @@ const queryClient = useQueryClient();
                   : `${review.reviewDescription.slice(0, 120)}...`}
               </article>
 
-          
               {/* see more or see like */}
               <button
                 onClick={() => toggleExpand(review._id)}
@@ -148,7 +144,9 @@ const queryClient = useQueryClient();
                   {totalLikes[review._id]}
                 </p>
               </div>
-              <p className="text-yellow-600">Ratings: <span className="text-white">{review.rating}</span></p>
+              <p className="text-yellow-600">
+                Ratings: <span className="text-white">{review.rating}</span>
+              </p>
             </section>
           </div>
         </main>
