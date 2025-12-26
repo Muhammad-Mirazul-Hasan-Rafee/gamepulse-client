@@ -36,7 +36,7 @@ const AddReview = () => {
     console.log(newGame);
 
     // Sending data to the server
-    fetch("https://gamepulse-server.onrender.com/game/game", {
+    fetch("http://localhost:8000/game", {
       method: "POST",
       headers: {
         "content-type": "application/json",

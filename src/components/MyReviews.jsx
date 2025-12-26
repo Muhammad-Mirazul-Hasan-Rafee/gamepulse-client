@@ -18,7 +18,7 @@ const MyReviews = () => {
     );
   }
 
-    fetch(`https://gamepulse-server.onrender.com/game/game?uid=${user.uid}`)
+    fetch(`http://localhost:8000/game?uid=${user.uid}`)
       .then((res) => res.json()) 
       .then((data) => {
         if (Array.isArray(data)) {

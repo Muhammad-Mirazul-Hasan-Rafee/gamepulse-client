@@ -121,7 +121,7 @@ A lightweight profile screen showing:
    
    VITE_apiKey=yourKey
    VITE_authDomain=...
-   VITE_backend_url=https://gamepulse-server.onrender.com/game
+   VITE_backend_url=http://localhost:8000
    
 4. Start the development server:
 
