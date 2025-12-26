@@ -31,7 +31,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
     };
 
     // .....................  Sending to server  ..................................
-    fetch(`http://localhost:8000/game/${_id}`, {
+    fetch(`https://gamepulse-server.onrender.com/game/${_id}`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(updatedGame),
@@ -68,7 +68,7 @@ const MyReviewGamesCard = ({ reviewedGame, games, setGames }) => {
       showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:8000/game/${_id}`, {
+        fetch(`https://gamepulse-server.onrender.com/game/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

@@ -66,7 +66,7 @@ const AllReviews = () => {
     }));
 
     // Update likedBy array of backend  for this(current) review
-    fetch(`http://localhost:8000/game/${id}/like`, {
+    fetch(`https://gamepulse-server.onrender.com/game/${id}/like`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
